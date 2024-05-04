@@ -1,0 +1,128 @@
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background:linear-gradient(100deg,#20CC44,#ce70db);
+    margin: auto;
+    font-family: 'Roboto',
+        sans-serif;
+}
+a{
+    text-decoration: none;
+}
+
+@media (min-width:768px){
+    .container{
+        width:750px;
+    }
+}
+
+@media (min-width:992px) {
+    .container{
+        width: 970px;
+    }
+}
+
+@media (min-width:1200px) {
+    .container{
+        width:1170px
+    }
+}
+
+.container{
+    background-color: #FFFFFF;
+    width: 1000px;
+    border-radius: 30px;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+}
+
+/*Start*/
+.left , .right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+    margin: 30px;
+}
+
+@media (max-width:768px){
+    .container{
+        grid-template-columns: 1fr;
+        margin: 10px;
+    }
+    .left{
+        display: none;
+    }
+}
+
+input[type='text'],[type='password'],[type='submit']{
+    border-radius: 20px;
+    border: 0px solid #ccc ;
+    padding:10px;
+    margin: 10px 0;
+    width: 100%;
+    background-color: #eae8e8;
+    
+}
+input[type='submit']{
+    color: #FFFFFF;
+}
+
+input[type='text']:hover,[type='password']:hover{
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #999;
+}
+
+
+    
+.icon-container{
+    position: relative;
+}
+
+.icon-container i  {
+    position: absolute;
+    left:10px;
+    top:50%;
+    transform: translateY(-50%);
+    color : #ccc;
+}
+
+.icon-container label{
+    position: absolute;
+    left:40px;
+    top:50%;
+    transform: translateY(-50%);
+    color : #ccc;
+}
+span{
+    color: #20CC44;
+    font-weight: bold;
+}
+
+.btn{
+    background-color: #20CC44;
+}
+
+.text{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: x-small;
+}
+
+.text a {
+    margin-top: 19px;
+}
