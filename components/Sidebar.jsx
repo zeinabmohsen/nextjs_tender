@@ -1,6 +1,10 @@
 import Link from 'next/link';
 import React from 'react';
 import {RxDashboard, RxPerson, RxSketchLogo} from 'react-icons/rx';
+import { IoChatbubblesOutline } from "react-icons/io5";
+import { FaUserDoctor } from "react-icons/fa6";
+import { MdOutlinePlace } from "react-icons/md";
+
 import {HiOutlineShoppingBag} from 'react-icons/hi';
 import {FiSettings} from 'react-icons/fi';
 
@@ -28,16 +32,24 @@ const Sidebar = ({children}) => {
 
                 <Link href='/place'>
                     <div className='bg-[#99DFBD] hover:bg-gray-300 text-black cursor-pointer my-4 p-3 rounded-lg inline-block'>
-                        <RxPerson size={20}/>
+                        <MdOutlinePlace size={20}/>
                     </div>
                 </Link>
 
                 
                 <Link href='/doctor'>
                     <div className='bg-[#99DFBD] hover:bg-gray-300 text-black cursor-pointer my-4 p-3 rounded-lg inline-block'>
-                        <RxPerson size={20}/>
+                        <FaUserDoctor size={20}/>
                     </div>
                 </Link>
+
+                                
+                <Link href='/community'>
+                    <div className='bg-[#99DFBD] hover:bg-gray-300 text-black cursor-pointer my-4 p-3 rounded-lg inline-block'>
+                        <IoChatbubblesOutline size={20}/>
+                    </div>
+                </Link>
+
 
                 <Link href='/orders'>
                     <div className='bg-[#99DFBD] hover:bg-gray-300 text-black cursor-pointer my-4 p-3 rounded-lg inline-block'>

@@ -21,15 +21,27 @@ export const ACTIONS = {
 
 export const createPlace = (place) => async (dispatch) => {
   try {
-    const { data } = await axios.post(ACTIONS.CREATE_PLACE, place,{headers: {
-        'Content-Type': 'multipart/form-data', 
-      },
-  });
+    // Retrieve token from localStorage
+
+    
+    const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}` ,
+      }
+    };
+
+    // Make the request with the token included in the headers
+    const { data } = await axios.post(ACTIONS.CREATE_PLACE, place, config);
+
+    // Dispatch action with the response data
     dispatch({ type: ACTIONS.CREATE_PLACE, data });
+    
     toast.success("Place created successfully");
   } catch (error) {
     console.error("Error creating place:", error);
-    toast.error("Error creating place");
+    // toast.error("Error creating place");
   }
 };
 

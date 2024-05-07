@@ -10,8 +10,14 @@ export const ACTIONS = {
 export const login = (credentials) => async (dispatch) => {
   try {
     const { data } = await axios.post("/auth/login", credentials);
+    
+    // Store token and userId in localStorage
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('userId', data.userId);
+    
     // Dispatch login action with user data if login is successful
     dispatch({ type: ACTIONS.LOGIN, data });
+    
     toast.success("Login successful");
   } catch (error) {
     console.error("Error logging in:", error);
