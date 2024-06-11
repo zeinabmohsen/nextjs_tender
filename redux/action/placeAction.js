@@ -12,7 +12,6 @@ export const ACTIONS = {
   REJECT_PLACE:"/place/reject-place/:id",
   DELETE_PLACE:"/place/:id",
 
-  //message
   CONFIRM_PLACE_SUCCESS: "CONFIRM_PLACE_SUCCESS",
   CONFIRM_PLACE_ERROR: "CONFIRM_PLACE_ERROR",
   REJECT_PLACE_SUCCESS: "REJECT_PLACE_SUCCESS",
@@ -21,29 +20,27 @@ export const ACTIONS = {
 
 export const createPlace = (place) => async (dispatch) => {
   try {
-    // Retrieve token from localStorage
-
-    
     const token = localStorage.getItem('token');
+
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
-        'Authorization': `Bearer ${token}` ,
-      }
+        'Authorization': `Bearer ${token}`,
+      },
     };
 
-    // Make the request with the token included in the headers
     const { data } = await axios.post(ACTIONS.CREATE_PLACE, place, config);
 
-    // Dispatch action with the response data
-    dispatch({ type: ACTIONS.CREATE_PLACE, data });
-    
+    dispatch({ type: ACTIONS.CREATE_PLACE, payload: data });
+
     toast.success("Place created successfully");
   } catch (error) {
     console.error("Error creating place:", error);
-    // toast.error("Error creating place");
+
+    toast.error("Error creating place");
   }
 };
+
 
 export const countplace = ()=>async (dispatch) => {
   try {
@@ -71,7 +68,7 @@ export const countpendingplace = ()=>async (dispatch) => {
     dispatch({ type: ACTIONS.COUNT_PENDING_PLACE, data });
   } catch (error) {
     console.error("Error counting places:", error);
-    toast.error("Error counting places");
+
   }
 }
 
@@ -80,7 +77,6 @@ export const approvedplace = ()=>async (dispatch) => {
     const { data } = await axios.get(ACTIONS.GET_ALL_APPROVED_PLACE);
     dispatch({ type: ACTIONS.GET_ALL_APPROVED_PLACE, data });
   } catch (error) {
-    console.error("Error approved places:", error);
     toast.error("Error approved places");
   }
 }

@@ -1,20 +1,55 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { createDoctor } from '../../../redux/action/doctorAction';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateDoctor, getDoctorById } from '../../../../redux/action/doctorAction';
+import { useRouter } from 'next/router';
+import { ToastContainer } from 'react-toastify';
 
 const EditDoctorForm = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { id } = router.query;
+  const [img, setImage] = useState(null);
+
+  const doctorData = useSelector(({ doctorReducer }) => doctorReducer.doctor?.doctor);
+
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getDoctorById(id))
+        .then((response) => {
+          setFormData(response.data);
+          setImage(response.data.doctor_image);
+        })
+        .catch((error) => {
+          console.error('Error fetching doctor details:', error);
+        });
+    }
+  }, [dispatch, id]);
   const [formData, setFormData] = useState({
-    doctor_name: '',
-    specialty: '',
-    experience: '',
-    number: '',
-    description: '',
+    doctor_name: doctorData?.doctor_name || '',
+    specialty: doctorData?.specialty || '',
+    experience: doctorData?.experience || '',
+    number: doctorData?.number || '',
+    description: doctorData?.description || '',
     doctor_image: null,
     termsAccepted: false,
   });
-  const [img, setImage] = useState(null);
-  const dispatch = useDispatch();
-
+  
+  useEffect(() => {
+    if (doctorData) {
+      setFormData({
+        doctor_name: doctorData.doctor_name || '',
+        specialty: doctorData.specialty || '',
+        experience: doctorData.experience || '',
+        number: doctorData.number || '',
+        description: doctorData.description || '',
+        doctor_image: null,
+        termsAccepted: false,
+      });
+      setImage(doctorData.doctor_image);
+    }
+  }, [doctorData]);
+  
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
@@ -34,30 +69,30 @@ const EditDoctorForm = () => {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Dispatch the action with FormData object
-    dispatch(createDoctor(formData));
-  
-    // Reset form data and image after dispatching the action
-    setFormData({
-      doctor_name: '',
-      specialty: '',
-      experience: '', // corrected typo here
-      number: '',
-      description: '',
-      doctor_image: null,
-      termsAccepted: false,
-    });
-    setImage(null);
-  };  
+    
+    // Construct the URL for updating doctor
+    const url = `${id}`;
+    
+    // Call updateDoctor and log the response
+    dispatch(updateDoctor(url, formData))
+      .then(response => {
+        console.log("Update Doctor Response:", response);
+        // Check response status and handle accordingly
+      })
+      .catch(error => {
+        console.error("Update Doctor Error:", error);
+        // Handle error if any
+      });
+  };
 
   return (
     <div className="bg-gray-100 px-4 py-8">
       <div className="container mx-auto px-4 py-8 shadow-lg rounded-lg bg-white">
-        <h2 className="text-2xl font-semibold text-[#019874] mb-4 text-center">Add New Doctor</h2>
+        <h2 className="text-2xl font-semibold text-[#019874] mb-4 text-center">Update Doctor</h2>
         <p className="text-gray-700 mb-8 text-center">
-          Please fill out the form with accurate information to add a new doctor.
+          Please fill out the form with accurate information to update a doctor.
         </p>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -85,11 +120,11 @@ const EditDoctorForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="experince" className="block text-sm font-medium text-gray-800 mb-2">Experience Years</label>
+            <label htmlFor="experience" className="block text-sm font-medium text-gray-800 mb-2">Experience Years</label>
             <input
               type="number"
-              id="experince"
-              name="experince"
+              id="experience"
+              name="experience"
               className="shadow-sm focus:ring-green-500 focus:outline-none w-full sm:text-sm rounded-md border border-gray-300 py-2 px-3"
               value={formData.experience}
               onChange={handleChange}
@@ -158,10 +193,11 @@ const EditDoctorForm = () => {
             type="submit"
             className="w-full py-2 px-4 border border-transparent rounded-md shadow-md text-white bg-[#019874] hover:bg-[#99DFBD] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
           >
-            Add Doctor
+            Update Doctor
           </button>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };

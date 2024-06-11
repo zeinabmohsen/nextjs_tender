@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router'; // Import useRouter from Next.js
 import { login } from '../../redux/action/authAction';
+import { toast } from 'react-toastify';
 
 const LoginForm = () => {
     const dispatch = useDispatch();
+    const router = useRouter(); // Initialize useRouter
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Perform form validation
-        if (!email || !password) {
-            setError('Please enter your email and password.');
-            return;
+              if (!email || !password) {
+          setError('Please enter your email and password.');
+          return;
         }
+        dispatch(login({ email, password, router }));
 
-        // Dispatch login action
-        dispatch(login({ email, password }));
+
     };
-
+    
     // Function to handle label animation
     const handleLabelAnimation = (e) => {
         const label = e.target.previousElementSibling;
@@ -59,3 +60,4 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
+

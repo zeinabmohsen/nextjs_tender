@@ -50,12 +50,12 @@ const Sidebar = ({children}) => {
                     </div>
                 </Link>
 
-
+{/* 
                 <Link href='/orders'>
                     <div className='bg-[#99DFBD] hover:bg-gray-300 text-black cursor-pointer my-4 p-3 rounded-lg inline-block'>
                         <HiOutlineShoppingBag size={20}/>
                     </div>
-                </Link>
+                </Link> */}
 
                 <Link href='/'>
                     <div className='bg-[#99DFBD] hover:bg-gray-300 text-black cursor-pointer my-4 p-3 rounded-lg inline-block'>

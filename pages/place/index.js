@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { BsSearch, BsStarFill, BsStarHalf, BsStar } from 'react-icons/bs'; // Icons
+import { BsSearch, BsStarFill, BsStarHalf, BsStar, BsTrash } from 'react-icons/bs'; // Icons
 import { RxAddCircle, RxSketchLogo } from 'react-icons/rx';
 import Modal from '../../components/PlaceModal'; // Import the modal component
-import { approvedplace , deletePlace } from "../../redux/action/placeAction";
+import { approvedplace, deletePlace } from "../../redux/action/placeAction";
 
 const Places = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,17 +17,24 @@ const Places = () => {
   const placesData = useSelector(({ placeReducer }) => placeReducer?.approvedPlaces?.data?.places);
   useEffect(() => {
     dispatch(approvedplace());
+
+    // Fetch approved places data every 30 seconds
+    const interval = setInterval(() => {
+      dispatch(approvedplace());
+    }, 5000);
+
+    // Clean up the interval on component unmount
+    return () => clearInterval(interval);
   }, [dispatch]);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value.toLowerCase());
   };
 
-  const handleApprove = () => {
-    dispatch(deletePlace(place.placeid
-    )); 
+  const handleApprove = (placeId) => {
+    dispatch(deletePlace(placeId));
     toast.success("Place deleted successfully");
-};
+  };
 
   const [places, setPlaces] = useState([]); // Initialize places state
 
@@ -81,9 +88,13 @@ const Places = () => {
               </div>
             )}
             <div className="p-4">
-              <h3 className="text-lg font-medium text-019874">{place.name}</h3>
-              <p className=" font-small text-gray-300">{place.classification}</p>
-              <div className="flex items-center text-sm my-2">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-lg font-medium text-019874">{place.name}</h3>
+                <button onClick={(e) => { e.stopPropagation(); dispatch(deletePlace(place.placeid)) }} className="text-[#019874] hover:text-red-500 transition duration-300">
+                  <BsTrash />
+                </button>
+              </div>
+              <div className="flex items-center text-sm mb-2">
                 <BsStarFill className="text-[#019874] mr-1" />
                 <BsStarFill className="text-[#019874] mr-1" />
                 <BsStarFill className="text-[#019874] mr-1" />
@@ -91,7 +102,8 @@ const Places = () => {
                 <BsStar className="text-gray-300" />
                 <span className="ml-2">{place.rating}</span>
               </div>
-              <p className="text-gray-600 mb-2">{place.description}</p>
+              <p className="inline-block bg-gray-200 rounded-full px-3 text-sm font-semibold text-gray-700 mr-2">{place.classification}</p>
+              <p className="font-small text-gray-500">{place.description}</p>
             </div>
           </li>
         ))}
@@ -104,4 +116,3 @@ const Places = () => {
 };
 
 export default Places;
-

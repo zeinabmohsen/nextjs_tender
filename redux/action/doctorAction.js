@@ -1,5 +1,3 @@
-// In your actions file (e.g., actions/doctorActions.js)
-
 import { toast } from "react-toastify";
 import axios from "../../Api/baseUrl";
 
@@ -7,8 +5,8 @@ export const ACTIONS = {
   GET_ALL_DOCTORS: "/dr",
   CREATE_DOCTOR: "/dr/createdoctor",
   DELETE_DOCTOR: "/dr/deleteDoctor/:id",
-  GET_DOCTOR_BY_ID: "/dr/:id", // New action
-  UPDATE_DOCTOR: "/dr/updatedoctor/:id" // New action
+  GET_DOCTOR_BY_ID: "/dr/:id",
+  UPDATE_DOCTOR: "/dr/updatedoctor/:id" 
 };
 
 export const getAllDoctors = () => async (dispatch) => {
@@ -55,17 +53,17 @@ export const getDoctorById = (id) => async (dispatch) => {
   }
 };
 
-export const updateDoctor = (id, doctor) => async (dispatch) => {
+export const updateDoctor = (id, updatedDoctor) => async (dispatch) => {
   try {
-    const { data } = await axios.put(`/dr/updatedoctor/${id}`, doctor, {
+    const { data } = await axios.put(`/dr/updatedoctor/${id}`, updatedDoctor, {
       headers: {
-        'Content-Type': 'multipart/form-data', // Set content type for file upload
+        'Content-Type': ' ',
       },
     });
     dispatch({ type: ACTIONS.UPDATE_DOCTOR, data });
     toast.success("Doctor updated successfully");
   } catch (error) {
     console.error("Error updating doctor:", error);
-    toast.error("Error updating doctor");
+    toast.error("Error while updating doctor");
   }
 };

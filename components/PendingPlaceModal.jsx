@@ -59,14 +59,14 @@ const Modal = ({ isOpen, onClose, place }) => {
                         <img src={`http://localhost:3000${place.photos[0].photo_url}`} alt={place.name} className="w-full h-40 object-cover relative" />
                     )}
                     <h3 className="text-lg font-medium text-019874 mt-4">{place.name}</h3>
-                    <div className="flex items-center text-sm my-2">
+                    {/* <div className="flex items-center text-sm my-2">
                         <BsStarFill className="text-[#019874] mr-1" />
                         <BsStarFill className="text-[#019874] mr-1" />
                         <BsStarFill className="text-[#019874] mr-1" />
                         <BsStarHalf className="text-[#019874] mr-1" />
                         <BsStar className="text-gray-300" />
                         <span className="ml-2">{place.rating}</span>
-                    </div>
+                    </div> */}
                     <p className={`text-sm mb-2 ${getStatusStyle()}`}>{status}</p>
                     {status === 'pending' && (
                         <div className="flex mt-4">

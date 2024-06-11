@@ -12,7 +12,6 @@ const AddDoctorForm = () => {
     doctor_image: null,
     termsAccepted: false,
   });
-  const [img, setImage] = useState(null);
   const dispatch = useDispatch();
 
   const handleChange = (event) => {
@@ -26,7 +25,6 @@ const AddDoctorForm = () => {
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      setImage(file);
       setFormData((prevData) => ({
         ...prevData,
         doctor_image: file,
@@ -34,24 +32,37 @@ const AddDoctorForm = () => {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Dispatch the action with FormData object
-    dispatch(createDoctor(formData));
   
-    // Reset form data and image after dispatching the action
-    setFormData({
-      doctor_name: '',
-      specialty: '',
-      experience: '', // corrected typo here
-      number: '',
-      description: '',
-      doctor_image: null,
-      termsAccepted: false,
-    });
-    setImage(null);
-  };  
-
+    // Create FormData object
+    const formDataToSend = new FormData();
+    formDataToSend.append("doctor_name", formData.doctor_name);
+    formDataToSend.append("specialty", formData.specialty);
+    formDataToSend.append("experience", formData.experience);
+    formDataToSend.append("number", formData.number);
+    formDataToSend.append("description", formData.description);
+    formDataToSend.append("doctor_image", formData.doctor_image); // Append the image file
+  
+    try {
+      const response = await dispatch(createDoctor(formDataToSend));
+      console.log(response); // Check the response from the server
+      // Reset form data after dispatching the action
+      setFormData({
+        doctor_name: '',
+        specialty: '',
+        experience: '',
+        number: '',
+        description: '',
+        doctor_image: null,
+        termsAccepted: false,
+      });
+    } catch (error) {
+      console.error("Error adding doctor:", error);
+      // Handle error here
+    }
+  };    
+  
   return (
     <div className="bg-gray-100 px-4 py-8">
       <div className="container mx-auto px-4 py-8 shadow-lg rounded-lg bg-white">
@@ -85,11 +96,11 @@ const AddDoctorForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="experince" className="block text-sm font-medium text-gray-800 mb-2">Experience Years</label>
+            <label htmlFor="experience" className="block text-sm font-medium text-gray-800 mb-2">Experience Years</label>
             <input
               type="number"
-              id="experince"
-              name="experince"
+              id="experience"
+              name="experience"
               className="shadow-sm focus:ring-green-500 focus:outline-none w-full sm:text-sm rounded-md border border-gray-300 py-2 px-3"
               value={formData.experience}
               onChange={handleChange}
@@ -123,16 +134,11 @@ const AddDoctorForm = () => {
           <div className="mb-4 flex justify-center items-center">
             <label htmlFor="doctor_image" className="text-sm font-medium mb-2 bg-[#019874] text-white rounded-lg px-7 py-5 cursor-pointer">
               <div style={{ textAlign: 'center' }}>
-                {img && (
-                  <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <img
-                      src={URL.createObjectURL(img)}
-                      alt="Uploaded"
-                      style={{ maxWidth: '20%', height: 'auto' }}
-                    />
-                  </div>
-                )}
-                {!img && <p>+</p>}
+                <img
+                  src={formData.doctor_image ? URL.createObjectURL(formData.doctor_image) : ''}
+                  alt="Uploaded"
+                  style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
+                />
               </div>
             </label>
             <input type="file" name="doctor_image" onChange={onImageChange} id="doctor_image" className="hidden" />
@@ -167,3 +173,5 @@ const AddDoctorForm = () => {
 };
 
 export default AddDoctorForm;
+
+

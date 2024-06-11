@@ -27,7 +27,7 @@ export const addComment = (comment) => async (dispatch) => {
 
     const { data } = await axios.post(ACTIONS.ADD_COMMENT, comment, config);
     dispatch({ type: ACTIONS.ADD_COMMENT, data });
-    toast.success("Comment added successfully");
+    // toast.success("Comment added successfully");
   } catch (error) {
     console.error("Error adding comment:", error);
   }
@@ -44,9 +44,7 @@ export const deleteComment = (commentID) => async (dispatch) => {
   }
 };
 
-// Similar implementations for other CRUD operations...
 
-// Additional actions...
 
 export const getCommentById = (commentID) => async (dispatch) => {
   try {

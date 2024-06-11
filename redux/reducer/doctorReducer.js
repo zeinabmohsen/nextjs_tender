@@ -4,7 +4,8 @@ const initialState = {
   allDoctors: {
     loaded: false,
     data: [],
-  }
+  },
+  doctor: null, // Add a new state to store individual doctor data
 };
 
 const doctorReducer = (state = initialState, { type, data }) => {
@@ -50,6 +51,12 @@ const doctorReducer = (state = initialState, { type, data }) => {
           ...state.allDoctors,
           data: updatedData,
         }
+      };
+    case ACTIONS.GET_DOCTOR_BY_ID:
+      console.log("Doctor details fetched:", data);
+      return {
+        ...state,
+        doctor: data,
       };
     default:
       return state;
