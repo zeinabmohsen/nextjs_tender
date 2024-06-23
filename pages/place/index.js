@@ -58,7 +58,8 @@ const Places = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 mt-8">
+    <div className='bg-gray-100 min-h-screen'>
+    <div className="container mx-auto ">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold text-019874">Places</h1>
         <div className="flex items-center space-x-4">
@@ -111,7 +112,7 @@ const Places = () => {
 
       {/* Render the modal */}
       <Modal isOpen={isModalOpen} onClose={closeModal} place={selectedPlace} />
-    </div>
+    </div></div>
   );
 };
 

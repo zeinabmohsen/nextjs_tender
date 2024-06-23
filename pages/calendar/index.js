@@ -5,6 +5,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { getAppointmentsByDoctor } from "../../redux/action/appointmentAction";
+import dynamic from "next/dynamic";
 
 const CalendarPage = () => {
   const [appointments, setAppointments] = useState([]);
@@ -40,6 +41,7 @@ const CalendarPage = () => {
   };
 
   return (
+    <div className="m-10 ">
     <div className="mt-10">
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
@@ -66,8 +68,9 @@ const CalendarPage = () => {
         )}
         dateClick={handleDateClick} // Handle date click
       />
-    </div>
+    </div></div>
   );
 };
 
-export default CalendarPage;
+export default dynamic (() => Promise.resolve(CalendarPage), {ssr: false})
+

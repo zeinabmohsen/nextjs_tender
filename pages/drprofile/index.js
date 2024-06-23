@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateDoctor, getDoctorById } from '../../../../redux/action/doctorAction';
+import { updateDoctor, getDoctorById } from '../../redux/action/doctorAction';
 import { useRouter } from 'next/router';
 import { ToastContainer } from 'react-toastify';
 
 const EditDoctorForm = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { id } = router.query;
+  const id = localStorage.getItem('userId'); // Retrieve doctor ID from local storage
   const [img, setImage] = useState(null);
 
   const doctorData = useSelector(({ doctorReducer }) => doctorReducer.doctor?.doctor);
@@ -26,12 +26,14 @@ const EditDoctorForm = () => {
   }, [dispatch, id]);
 
   const [formData, setFormData] = useState({
-    doctor_name: doctorData?.doctor_name || '',
-    specialty: doctorData?.specialty || '',
-    experience: doctorData?.experience || '',
-    number: doctorData?.number || '',
-    description: doctorData?.description || '',
+    doctor_name: '',
+    specialty: '',
+    experience: '',
+    number: '',
+    description: '',
     doctor_image: null,
+    email: '',
+    password: '',
     termsAccepted: false,
   });
 
@@ -44,6 +46,8 @@ const EditDoctorForm = () => {
         number: doctorData.number || '',
         description: doctorData.description || '',
         doctor_image: null,
+        email: doctorData.email || '',
+        password: doctorData.password || '',
         termsAccepted: false,
       });
       setImage(doctorData.doctor_image);
@@ -51,10 +55,10 @@ const EditDoctorForm = () => {
   }, [doctorData]);
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value, type, checked } = event.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
@@ -77,9 +81,11 @@ const EditDoctorForm = () => {
     dispatch(updateDoctor(url, formData))
       .then(response => {
         console.log("Update Doctor Response:", response);
+        // Optionally, redirect or show success message
       })
       .catch(error => {
         console.error("Update Doctor Error:", error);
+        // Optionally, show error message
       });
   };
 
@@ -90,9 +96,9 @@ const EditDoctorForm = () => {
   return (
     <div className="bg-gray-100 px-4 py-8">
       <div className="container mx-auto px-4 py-8 shadow-lg rounded-lg bg-white">
-        <h2 className="text-2xl font-semibold text-[#019874] mb-4 text-center">Update Doctor</h2>
+        <h2 className="text-2xl font-semibold text-[#019874] mb-4 text-center">Profile</h2>
         <p className="text-gray-700 mb-8 text-center">
-          Please fill out the form with accurate information to update a doctor.
+          Please fill out the form with accurate information.
         </p>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">

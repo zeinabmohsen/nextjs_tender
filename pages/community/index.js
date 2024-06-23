@@ -62,8 +62,11 @@ const CommunityComments = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 mt-8">
-            <h1 className="text-2xl font-semibold text-019874 mb-6">Community Comments</h1>
+        <div className='bg-gray-100 '>
+        <div className="  container mx-auto  ">
+            <br></br>
+        <p className="text-2xl font-semibold text-019874 ">Community Comments</p><br></br>
+
 
             {/* Comment input */}
             <div className="mb-6">
@@ -153,7 +156,7 @@ const CommunityComments = () => {
                     </div>
                 </div>
             )}
-        </div>
+        </div></div>
         
     );
 };

@@ -10,6 +10,8 @@ const AddDoctorForm = () => {
     number: '',
     description: '',
     doctor_image: null,
+    email: '',
+    password: '',
     termsAccepted: false,
   });
   const dispatch = useDispatch();
@@ -34,7 +36,7 @@ const AddDoctorForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     // Create FormData object
     const formDataToSend = new FormData();
     formDataToSend.append("doctor_name", formData.doctor_name);
@@ -43,7 +45,9 @@ const AddDoctorForm = () => {
     formDataToSend.append("number", formData.number);
     formDataToSend.append("description", formData.description);
     formDataToSend.append("doctor_image", formData.doctor_image); // Append the image file
-  
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("password", formData.password);
+
     try {
       const response = await dispatch(createDoctor(formDataToSend));
       console.log(response); // Check the response from the server
@@ -55,14 +59,16 @@ const AddDoctorForm = () => {
         number: '',
         description: '',
         doctor_image: null,
+        email: '',
+        password: '',
         termsAccepted: false,
       });
     } catch (error) {
       console.error("Error adding doctor:", error);
       // Handle error here
     }
-  };    
-  
+  };
+
   return (
     <div className="bg-gray-100 px-4 py-8">
       <div className="container mx-auto px-4 py-8 shadow-lg rounded-lg bg-white">
@@ -131,6 +137,30 @@ const AddDoctorForm = () => {
               required
             ></textarea>
           </div>
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-800 mb-2">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              className="shadow-sm focus:ring-green-500 focus:outline-none w-full sm:text-sm rounded-md border border-gray-300 py-2 px-3"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-800 mb-2">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              className="shadow-sm focus:ring-green-500 focus:outline-none w-full sm:text-sm rounded-md border border-gray-300 py-2 px-3"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
           <div className="mb-4 flex justify-center items-center">
             <label htmlFor="doctor_image" className="text-sm font-medium mb-2 bg-[#019874] text-white rounded-lg px-7 py-5 cursor-pointer">
               <div style={{ textAlign: 'center' }}>
@@ -143,7 +173,6 @@ const AddDoctorForm = () => {
             </label>
             <input type="file" name="doctor_image" onChange={onImageChange} id="doctor_image" className="hidden" />
           </div>
-
           <div className="mb-4">
             <label htmlFor="termsAccepted" className="flex items-center">
               <input
@@ -152,7 +181,7 @@ const AddDoctorForm = () => {
                 type="checkbox"
                 className="focus:ring-green-500 h-4 w-4 text-green-500 border-gray-300 rounded"
                 checked={formData.termsAccepted}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, termsAccepted: e.target.checked })}
                 required
               />
               <span className="ml-2 text-gray-800">
@@ -173,5 +202,3 @@ const AddDoctorForm = () => {
 };
 
 export default AddDoctorForm;
-
-

@@ -29,12 +29,8 @@ const Doctors = () => {
     ) : [];
 
     return (
-        <div className='bg-gray-100 min-h-screen'>
-            <div className='flex justify-between p-4'>
-                <h2>Doctor</h2>
-                <h2>Welcome Back, User</h2> {/* Replace "User" with actual user's name */}
-            </div>
-
+        <div className="bg-gray-100 min-h-screen">
+        <div className=' min-h-screen container mx-auto'>
             <div className='p-10'>
                 <div className='flex items-center justify-between mb-5'>
                     <div className="relative flex items-center">
@@ -103,7 +99,7 @@ const Doctors = () => {
                     </ul>
                 </div>
             </div>
-        </div>
+        </div></div>
     );
 };
 

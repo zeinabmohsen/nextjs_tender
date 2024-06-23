@@ -7,19 +7,40 @@ import Sidebar from '@/components/Sidebar';
 import 'regenerator-runtime/runtime';
 import '@/styles/globals.css';
 import configureStore from '../redux/store';
+import Navbar from '@/components/Navbar';
+
+
+const getUserInfo = () => {
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+    return { token, role };
+  }
+  return { token: null, role: null };
+};
+
+const isAdmin = () => {
+  const { role } = getUserInfo();
+  return role === 'admin';
+};
 
 
 const isLoggedIn = () => {
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('token');
-    return !!token; 
-  }
-  return false; 
+  const { token } = getUserInfo();
+  return !!token;
+};
+
+const isDoctor = () => {
+  const { role } = getUserInfo();
+  return role === 'doctor';
 };
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
   const loggedIn = isLoggedIn();
+  const doctorRole = isDoctor();
+  const isAdminRole = isAdmin();
+
   const isLoginPage = router.pathname === '/login';
 
   useEffect(() => {
@@ -39,17 +60,21 @@ export default function App({ Component, pageProps }) {
 
   useEffect(() => {
     // Redirect to login page if not logged in and trying to access other pages
-    if (!loggedIn && !isLoginPage && router.pathname !== '/login') {
+    if (!loggedIn && !isLoginPage) {
       router.push('/login');
+    } else if (loggedIn && isDoctor() && !['/schedule', '/calendar', '/drprofile'].includes(router.pathname)) {
+      router.push('/calendar');
     }
   }, [loggedIn, isLoginPage, router.pathname]);
 
   return (
     <Provider store={configureStore().store}>
       {loggedIn && !isLoginPage && (
-        <Sidebar>
+        // Conditionally render Sidebar or Navbar based on isAdminRole
+        <>
+          {isAdminRole ? <Sidebar /> : <Navbar />}
           <Component {...pageProps} />
-        </Sidebar>
+        </>
       )}
       {!loggedIn || isLoginPage ? (
         <Component {...pageProps} />
@@ -68,3 +93,5 @@ export default function App({ Component, pageProps }) {
     </Provider>
   );
 }
+
+
