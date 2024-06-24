@@ -40,7 +40,7 @@ export const deleteDoctor = (id) => async (dispatch) => {
     toast.success("Doctor deleted successfully");
   } catch (error) {
     console.error("Error deleting doctor:", error);
-    toast.error("Error deleting doctor");
+
   }
 };
 

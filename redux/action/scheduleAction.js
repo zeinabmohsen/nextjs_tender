@@ -4,7 +4,8 @@ import axios from "../../Api/baseUrl";
 export const ACTIONS = {
   CREATE_SCHEDULE: "/schedule",
   UPDATE_SCHEDULE: "/schedule/:scheduleId",
-  GET_SCHEDULE_BY_DOCTOR_ID: "/schedule/:doctorId"
+  GET_SCHEDULE_BY_DOCTOR_ID: "/schedule/:doctorId",
+  DELETE_SCHEDULE:"/schedule/:scheduleId"
 };
 
 export const createSchedule = (schedule) => async (dispatch) => {
@@ -17,16 +18,31 @@ export const createSchedule = (schedule) => async (dispatch) => {
   }
 };
 
+const API_BASE_URL = "localost:3000/schedule"
 export const updateSchedule = (scheduleId, updatedSchedule) => async (dispatch) => {
   try {
-    const { data } = await axios.put(`/schedule/${scheduleId}`, updatedSchedule);
-    dispatch({ type: ACTIONS.UPDATE_SCHEDULE, data });
+    console.log("Updating schedule with data:", updatedSchedule);
+    console.log(`id id ${scheduleId}`)
+    const { data } = await axios.put(`schedule/${scheduleId}`, updatedSchedule);
+    dispatch({ type: 'UPDATE_SCHEDULE', data });
     toast.success("Schedule updated successfully");
   } catch (error) {
     console.error("Error updating schedule:", error);
     toast.error("Error while updating schedule");
   }
 };
+
+export const deleteSchedule = (scheduleId) => async (dispatch) => {
+  try {
+    await axios.delete(`schedule/${scheduleId}`);
+    dispatch({ type: ACTIONS.DELETE_SCHEDULE });
+    toast.success("schedule deleted successfully");
+  } catch (error) {
+    console.error("Error deleting schedule:", error);
+
+  }
+};
+
 
 export const getScheduleByDoctorId = (doctorId) => async (dispatch) => {
   try {

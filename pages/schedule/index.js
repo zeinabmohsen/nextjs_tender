@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getScheduleByDoctorId, createSchedule, updateSchedule, deleteSchedule } from '../../redux/action/scheduleAction';
 import { useDispatch, useSelector } from 'react-redux';
+import { getScheduleByDoctorId, createSchedule, updateSchedule, deleteSchedule } from '../../redux/action/scheduleAction';
 
 const Schedule = () => {
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const Schedule = () => {
   useEffect(() => {
     if (scheduleData) {
       setScheduleForm(scheduleData.map(schedule => ({
-        id: schedule.id,
+        id: schedule.schedule_id, // Ensure to use schedule_id here
         day: schedule.day_of_week,
         startTime: schedule.start_time,
         endTime: schedule.end_time,
@@ -51,19 +51,31 @@ const Schedule = () => {
     const existingDayIndex = scheduleForm.findIndex(day => day.day === selectedDay);
 
     if (existingDayIndex !== -1) {
-      const updatedSchedule = [...scheduleForm];
-      updatedSchedule[existingDayIndex] = { day: selectedDay, startTime, endTime, slotDuration };
-      setScheduleForm(updatedSchedule);
+      const scheduleId = scheduleForm[existingDayIndex].id;
+      console.log("Updating existing schedule with id:", scheduleId); // Log scheduleId here
+      
+      const updatedSchedule = { 
+        dayOfWeek: selectedDay, 
+        startTime, 
+        endTime, 
+        slotDuration 
+      };
 
-      const scheduleId = updatedSchedule[existingDayIndex].id;
-      dispatch(updateSchedule({
-        scheduleId,
+      setScheduleForm(prevForm => 
+        prevForm.map((day, index) => index === existingDayIndex ? { ...day, ...updatedSchedule, id: scheduleId } : day)
+      );
+
+      dispatch(updateSchedule(scheduleId, {
         doctorId,
         dayOfWeek: selectedDay,
         startTime,
         endTime,
         slotDuration
-      }));
+      })).then(() => {
+        console.log("Schedule updated successfully!"); // Log success message
+      }).catch(error => {
+        console.error("Error updating schedule:", error); // Log error message
+      });
     } else {
       const newDay = {
         day: selectedDay,
@@ -79,7 +91,11 @@ const Schedule = () => {
         startTime,
         endTime,
         slotDuration
-      }));
+      })).then(() => {
+        console.log("Schedule created successfully!"); // Log success message
+      }).catch(error => {
+        console.error("Error creating schedule:", error); // Log error message
+      });
     }
 
     resetForm();
@@ -106,12 +122,14 @@ const Schedule = () => {
       return;
     }
 
-    // Optimistically remove the day from UI
     const updatedSchedule = scheduleForm.filter(day => day.id !== scheduleId);
     setScheduleForm(updatedSchedule);
 
-    // Delete the schedule from backend
-    dispatch(deleteSchedule(scheduleId));
+    dispatch(deleteSchedule(scheduleId)).then(() => {
+      console.log("Schedule deleted successfully!"); // Log success message
+    }).catch(error => {
+      console.error("Error deleting schedule:", error); // Log error message
+    });
   };
 
   const resetForm = () => {
@@ -138,7 +156,7 @@ const Schedule = () => {
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
             className="mr-4 rounded border border-gray-300 px-3 py-2 focus:outline-none"
-            step="60" // Added step attribute to allow minutes in increments of 1 minute
+            step="60"
           />
           <label className="mr-2">End Time:</label>
           <input
@@ -146,7 +164,7 @@ const Schedule = () => {
             value={endTime}
             onChange={(e) => setEndTime(e.target.value)}
             className="mr-4 rounded border border-gray-300 px-3 py-2 focus:outline-none"
-            step="60" // Added step attribute to allow minutes in increments of 1 minute
+            step="60"
           />
           <label className="mr-2">Slot Duration (mins):</label>
           <input
@@ -157,7 +175,6 @@ const Schedule = () => {
             onChange={(e) => setSlotDuration(e.target.value)}
             className="mr-4 rounded border border-gray-300 px-3 py-2 focus:outline-none"
           />
-
           <button
             onClick={addOrUpdateDay}
             className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
@@ -186,7 +203,7 @@ const Schedule = () => {
                       value={day.startTime}
                       onChange={(event) => handleTimeChange(index, 'startTime', event.target.value)}
                       className="border border-gray-300 rounded-md focus:outline-none focus:border-green-500 focus:shadow-outline-green px-3 py-2 w-32"
-                      step="60" // Added step attribute to allow minutes in increments of 1 minute
+                      step="60"
                     />
                   </td>
                   <td className="px-6 py-4 whitespace-no-wrap">
@@ -195,7 +212,7 @@ const Schedule = () => {
                       value={day.endTime}
                       onChange={(event) => handleTimeChange(index, 'endTime', event.target.value)}
                       className="border border-gray-300 rounded-md focus:outline-none focus:border-green-500 focus:shadow-outline-green px-3 py-2 w-32"
-                      step="60" // Added step attribute to allow minutes in increments of 1 minute
+                      step="60"
                     />
                   </td>
                   <td className="px-6 py-4 whitespace-no-wrap">
@@ -203,21 +220,20 @@ const Schedule = () => {
                       type="number"
                       value={day.slotDuration}
                       onChange={(event) => handleTimeChange(index, 'slotDuration', event.target.value)}
-                      className="border border-gray-300 rounded-md focus:outline-none focus:border-green-500 focus:shadow-outline-green px-3 py-2 w-32"
-                      min={0}
-                      max={59}
+                      className="border border-gray-300
+                      rounded-md focus:outline-none focus:border-green-500 focus:shadow-outline-green px-3 py-2 w-32"
                     />
                   </td>
                   <td className="px-6 py-4 whitespace-no-wrap">
                     <button
                       onClick={() => handleEditDay(index)}
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                      className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded mr-2"
                     >
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDeleteDay(day.id)}
-                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                      onClick={() => handleDeleteDay(day.id)} // Ensure to pass the correct scheduleId to delete
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
                     >
                       Delete
                     </button>

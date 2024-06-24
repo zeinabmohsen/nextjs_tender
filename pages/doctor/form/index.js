@@ -163,13 +163,18 @@ const AddDoctorForm = () => {
           </div>
           <div className="mb-4 flex justify-center items-center">
             <label htmlFor="doctor_image" className="text-sm font-medium mb-2 bg-[#019874] text-white rounded-lg px-7 py-5 cursor-pointer">
-              <div style={{ textAlign: 'center' }}>
-                <img
-                  src={formData.doctor_image ? URL.createObjectURL(formData.doctor_image) : ''}
-                  alt="Uploaded"
-                  style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
-                />
-              </div>
+            <div style={{ textAlign: 'center' }}>
+  {formData.doctor_image ? (
+    <img
+      src={URL.createObjectURL(formData.doctor_image)}
+      alt="Uploaded"
+      style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
+    />
+  ) : (
+    <p>+</p>
+  )}
+</div>
+
             </label>
             <input type="file" name="doctor_image" onChange={onImageChange} id="doctor_image" className="hidden" />
           </div>

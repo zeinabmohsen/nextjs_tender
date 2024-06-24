@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateDoctor, getDoctorById } from '../../redux/action/doctorAction';
 import { useRouter } from 'next/router';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditDoctorForm = () => {
   const dispatch = useDispatch();
@@ -11,6 +12,18 @@ const EditDoctorForm = () => {
   const [img, setImage] = useState(null);
 
   const doctorData = useSelector(({ doctorReducer }) => doctorReducer.doctor?.doctor);
+
+  const [formData, setFormData] = useState({
+    doctor_name: '',
+    specialty: '',
+    experience: '',
+    number: '',
+    description: '',
+    doctor_image: null,
+    email: '',
+    password: '',
+    termsAccepted: false,
+  });
 
   useEffect(() => {
     if (id) {
@@ -24,18 +37,6 @@ const EditDoctorForm = () => {
         });
     }
   }, [dispatch, id]);
-
-  const [formData, setFormData] = useState({
-    doctor_name: '',
-    specialty: '',
-    experience: '',
-    number: '',
-    description: '',
-    doctor_image: null,
-    email: '',
-    password: '',
-    termsAccepted: false,
-  });
 
   useEffect(() => {
     if (doctorData) {
@@ -76,15 +77,18 @@ const EditDoctorForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const url = `${id}`;
+    const updateFormData = new FormData();
+    for (const key in formData) {
+      updateFormData.append(key, formData[key]);
+    }
 
-    dispatch(updateDoctor(url, formData))
-      .then(response => {
-        console.log("Update Doctor Response:", response);
+    dispatch(updateDoctor(id, updateFormData))
+      .then((response) => {
+        console.log('Update Doctor Response:', response);
         // Optionally, redirect or show success message
       })
-      .catch(error => {
-        console.error("Update Doctor Error:", error);
+      .catch((error) => {
+        console.error('Update Doctor Error:', error);
         // Optionally, show error message
       });
   };
@@ -102,7 +106,9 @@ const EditDoctorForm = () => {
         </p>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="doctor_name" className="block text-sm font-medium text-gray-800 mb-2">Doctor Name</label>
+            <label htmlFor="doctor_name" className="block text-sm font-medium text-gray-800 mb-2">
+              Doctor Name
+            </label>
             <input
               type="text"
               id="doctor_name"
@@ -114,7 +120,9 @@ const EditDoctorForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="specialty" className="block text-sm font-medium text-gray-800 mb-2">Specialty</label>
+            <label htmlFor="specialty" className="block text-sm font-medium text-gray-800 mb-2">
+              Specialty
+            </label>
             <input
               type="text"
               id="specialty"
@@ -126,7 +134,9 @@ const EditDoctorForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="experience" className="block text-sm font-medium text-gray-800 mb-2">Experience Years</label>
+            <label htmlFor="experience" className="block text-sm font-medium text-gray-800 mb-2">
+              Experience Years
+            </label>
             <input
               type="number"
               id="experience"
@@ -138,7 +148,9 @@ const EditDoctorForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="number" className="block text-sm font-medium text-gray-800 mb-2">Phone Number</label>
+            <label htmlFor="number" className="block text-sm font-medium text-gray-800 mb-2">
+              Phone Number
+            </label>
             <input
               type="tel"
               id="number"
@@ -150,7 +162,9 @@ const EditDoctorForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-800 mb-2">Description</label>
+            <label htmlFor="description" className="block text-sm font-medium text-gray-800 mb-2">
+              Description
+            </label>
             <textarea
               id="description"
               name="description"
@@ -162,7 +176,10 @@ const EditDoctorForm = () => {
             ></textarea>
           </div>
           <div className="mb-4 flex justify-center items-center">
-            <label htmlFor="doctor_image" className="text-sm font-medium mb-2 bg-[#019874] text-white rounded-lg px-7 py-5 cursor-pointer">
+            <label
+              htmlFor="doctor_image"
+              className="text-sm font-medium mb-2 bg-[#019874] text-white rounded-lg px-7 py-5 cursor-pointer"
+            >
               <div style={{ textAlign: 'center' }}>
                 {img && (
                   <div style={{ display: 'flex', justifyContent: 'center' }}>

@@ -49,6 +49,20 @@ const scheduleReducer = (state = initialState, { type, data }) => {
           data: data,
         }
       };
+      case ACTIONS.DELETE_SCHEDULE:
+      console.log("Schedule deleted");
+      // Filter out the deleted schedule
+      const filteredData = state.allSchedules.data.filter(schedule =>
+        schedule.id !== data.id
+      );
+      return {
+        ...state,
+        allSchedules: {
+          ...state.allSchedules,
+          data: filteredData,
+        },
+      };
+
     default:
       return state;
   }

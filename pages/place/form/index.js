@@ -57,9 +57,9 @@ const Form = () => {
 
   // Example service IDs
   const services = [
-    { id: '1', name: 'Service 1' },
-    { id: '2', name: 'Service 2' },
-    { id: '3', name: 'Service 3' },
+    { id: '1', name: 'WheelChair' },
+    { id: '2', name: 'ADHD' },
+    { id: '3', name: 'Austtim' },
   ];
 
 
