@@ -33,11 +33,10 @@ const CalendarPage = () => {
     title: `${appointment.fullName} - ${appointment.reason}`,
     start: appointment.appointment_date,
     end: appointment.end_time,
-    status: appointment.status // Assuming appointment.status holds 'Scheduled', 'Cancelled', 'Completed'
+    status: appointment.status 
   }));
 
   const handleDateClick = (arg) => {
-    // Redirect or handle date click as needed
     console.log('Date clicked:', arg.dateStr);
   };
 
@@ -72,9 +71,10 @@ const CalendarPage = () => {
             >
               <div>{eventInfo.timeText}</div>
               <div>{eventInfo.event.title}</div>
+              <div>{eventInfo.event.extendedProps.status}</div>
             </div>
           )}
-          dateClick={handleDateClick} // Handle date click
+          dateClick={handleDateClick} 
         />
       </div>
     </div>

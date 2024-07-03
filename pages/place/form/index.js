@@ -55,7 +55,7 @@ const Form = () => {
     }
   };
 
-  // Example service IDs
+
   const services = [
     { id: '1', name: 'WheelChair' },
     { id: '2', name: 'ADHD' },
@@ -176,22 +176,6 @@ const Form = () => {
           <div className="mb-4 space-y-2">
             <label className="block text-sm font-medium text-gray-800 mb-2">Services Provided</label>
             <div className="grid grid-cols-2 gap-4">
-            {/* {ServicesData && ServicesData.map((service) => (
-  <div className="flex items-center" key={service.serviceid}>
-    <input 
-      name="services"
-      data-serviceid={service.serviceid}
-      type="checkbox"
-      className="focus:ring-green-500 h-4 w-4 text-green-500 border-gray-300 rounded"
-      checked={formData.services.includes(service.serviceid)} // Check if service ID is included in the services array
-      onChange={handleChange}
-      value={service.id}
-    />
-    <label htmlFor={service.servicename} className="ml-3">
-      {service.servicename}
-    </label>
-  </div> */}
-{/* ))} */}
       {services.map((service) => (
         <div key={service.id}>
           <input
