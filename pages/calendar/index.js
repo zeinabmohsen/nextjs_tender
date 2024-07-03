@@ -16,7 +16,9 @@ const CalendarPage = () => {
       try {
         if (typeof window !== "undefined" && localStorage.getItem("userId")) {
           const doctorId = localStorage.getItem("userId");
-          const doctorAppointments = await dispatch(getAppointmentsByDoctor(doctorId));
+          const doctorAppointments = await dispatch(
+            getAppointmentsByDoctor(doctorId)
+          );
           setAppointments(doctorAppointments);
         } else {
           console.warn("localStorage is not available or userId is not set.");
@@ -29,14 +31,16 @@ const CalendarPage = () => {
     fetchAppointments();
   }, [dispatch]);
 
-  const formattedAppointments = appointments.map(appointment => ({
+  const formattedAppointments = appointments.map((appointment) => ({
     title: `${appointment.fullName} - ${appointment.reason}`,
-    start: appointment.appointment_date,
+    start: `${appointment.appointment_date.split("T")[0]}T${
+      appointment.start_time
+    }`,
     end: appointment.end_time,
-    status: appointment.status 
+    status: appointment.status // Assuming appointment.status holds 'Scheduled', 'Cancelled', 'Completed'
   }));
-
   const handleDateClick = (arg) => {
+    // Redirect or handle date click as needed
     console.log('Date clicked:', arg.dateStr);
   };
 
@@ -47,10 +51,10 @@ const CalendarPage = () => {
           plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
           initialView="dayGridMonth"
           headerToolbar={{
-            start: 'today prev,next',
-            center: 'title',
-            end: 'dayGridMonth,timeGridWeek,timeGridDay',
-            className: 'custom-header-toolbar'
+            start: "today prev,next",
+            center: "title",
+            end: "dayGridMonth,timeGridWeek,timeGridDay",
+            className: "custom-header-toolbar",
           }}
           height={"90vh"}
           selectable
@@ -63,10 +67,13 @@ const CalendarPage = () => {
           eventContent={(eventInfo) => (
             <div
               className={`px-2 py-1 rounded-md ${
-                eventInfo.event.extendedProps.status === 'Scheduled' ? 'bg-blue-500 text-white' :
-                eventInfo.event.extendedProps.status === 'Cancelled' ? 'bg-red-500 text-white' :
-                eventInfo.event.extendedProps.status === 'Completed' ? 'bg-green-500 text-white' :
-                ''
+                eventInfo.event.extendedProps.status === "Scheduled"
+                  ? "bg-blue-500 text-white"
+                  : eventInfo.event.extendedProps.status === "Cancelled"
+                  ? "bg-red-500 text-white"
+                  : eventInfo.event.extendedProps.status === "Completed"
+                  ? "bg-green-500 text-white"
+                  : ""
               }`}
             >
               <div>{eventInfo.timeText}</div>
@@ -82,6 +89,3 @@ const CalendarPage = () => {
 };
 
 export default dynamic(() => Promise.resolve(CalendarPage), { ssr: false });
-
-
-
