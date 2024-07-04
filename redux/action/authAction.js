@@ -15,10 +15,10 @@ if (token) {
 }
 
 export const login = (credentials) => async (dispatch) => {
-  const { email, password, router } = credentials; 
+  const { email, password, router } = credentials;
 
   try {
-    const { data } = await axios.post("/auth/loginweb", { email, password }); 
+    const { data } = await axios.post("/auth/loginweb", { email, password });
 
     console.log("Login successful. Data:", data);
 
@@ -37,17 +37,20 @@ export const login = (credentials) => async (dispatch) => {
         await localStorage.setItem("role", data.role);
       }
 
-      localStorage.setItem("router", JSON.stringify(router)); 
-      router.push("/"); 
+      localStorage.setItem("router", JSON.stringify(router));
+      if (data.role === "admin") {
+        router.push("/");
+      } else {
+        router.push("/calendar");
+      }
     }
 
     dispatch({ type: ACTIONS.LOGIN, data });
   } catch (error) {
     console.error("Error logging in:", error);
-    return { success: false, message: 'An error occurred during login' }; 
+    return { success: false, message: "An error occurred during login" };
   }
 };
-
 
 export const signup = (userData) => async (dispatch) => {
   try {
@@ -58,8 +61,7 @@ export const signup = (userData) => async (dispatch) => {
   } catch (error) {
     console.error("Error signing up:", error);
     toast.error("Error signing up");
-    return { success: false, message: 'An error occurred during login' };
-
+    return { success: false, message: "An error occurred during login" };
   }
 };
 
@@ -69,7 +71,7 @@ export const logout = () => async (dispatch) => {
 
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
-    
+
     dispatch({ type: ACTIONS.LOGOUT });
 
     toast.success("Logout successful");
@@ -78,4 +80,3 @@ export const logout = () => async (dispatch) => {
     toast.error("Error logging out");
   }
 };
-
