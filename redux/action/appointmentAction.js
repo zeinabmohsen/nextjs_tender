@@ -6,11 +6,15 @@ export const ACTIONS = {
   GET_APPOINTMENTS_BY_USER: "/appointment/user",
   GET_AVAILABLE_TIME_SLOTS: "/appointment/available-time-slots",
   GET_APPOINTMENTS_BY_DOCTOR: "/appointment/doctor", // New action type
+  UPDATE_APPOINTMENT_STATUS: "/:appointmentId/status",
 };
 
 export const createAppointment = (appointmentData) => async (dispatch) => {
   try {
-    const { data } = await axios.post(ACTIONS.CREATE_APPOINTMENT, appointmentData);
+    const { data } = await axios.post(
+      ACTIONS.CREATE_APPOINTMENT,
+      appointmentData
+    );
     toast.success("Appointment created successfully");
     return data;
   } catch (error) {
@@ -22,7 +26,9 @@ export const createAppointment = (appointmentData) => async (dispatch) => {
 
 export const getAppointmentsByUser = (userId) => async (dispatch) => {
   try {
-    const { data } = await axios.get(`${ACTIONS.GET_APPOINTMENTS_BY_USER}/${userId}`);
+    const { data } = await axios.get(
+      `${ACTIONS.GET_APPOINTMENTS_BY_USER}/${userId}`
+    );
     return data.appointments;
   } catch (error) {
     console.error("Error getting appointments by user ID:", error);
@@ -31,21 +37,26 @@ export const getAppointmentsByUser = (userId) => async (dispatch) => {
   }
 };
 
-export const getAvailableTimeSlots = (doctorId, appointmentDate) => async (dispatch) => {
-  try {
-    const { data } = await axios.get(`${ACTIONS.GET_AVAILABLE_TIME_SLOTS}/${doctorId}/${appointmentDate}`);
-    return data.availableTimeSlots;
-  } catch (error) {
-    console.error("Error getting available time slots:", error);
-    toast.error("Error getting available time slots");
-    throw error;
-  }
-};
+export const getAvailableTimeSlots =
+  (doctorId, appointmentDate) => async (dispatch) => {
+    try {
+      const { data } = await axios.get(
+        `${ACTIONS.GET_AVAILABLE_TIME_SLOTS}/${doctorId}/${appointmentDate}`
+      );
+      return data.availableTimeSlots;
+    } catch (error) {
+      console.error("Error getting available time slots:", error);
+      toast.error("Error getting available time slots");
+      throw error;
+    }
+  };
 
 // New function to get all appointments by doctor ID
 export const getAppointmentsByDoctor = (doctorId) => async (dispatch) => {
   try {
-    const { data } = await axios.get(`${ACTIONS.GET_APPOINTMENTS_BY_DOCTOR}/${doctorId}`);
+    const { data } = await axios.get(
+      `${ACTIONS.GET_APPOINTMENTS_BY_DOCTOR}/${doctorId}`
+    );
     return data.appointments;
   } catch (error) {
     console.error("Error getting appointments by doctor ID:", error);
@@ -53,3 +64,19 @@ export const getAppointmentsByDoctor = (doctorId) => async (dispatch) => {
     throw error;
   }
 };
+
+export const updateAppointmentStatus =
+  (appointmentId, status) => async (dispatch) => {
+    try {
+      const { data } = await axios.put(
+        `${ACTIONS.UPDATE_APPOINTMENT_STATUS}/${appointmentId}/status`,
+        { status }
+      );
+      toast.success("Appointment status updated successfully");
+      return data;
+    } catch (error) {
+      console.error("Error updating appointment status:", error);
+      toast.error("Error updating appointment status");
+      throw error;
+    }
+  };
