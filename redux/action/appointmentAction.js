@@ -6,7 +6,7 @@ export const ACTIONS = {
   GET_APPOINTMENTS_BY_USER: "/appointment/user",
   GET_AVAILABLE_TIME_SLOTS: "/appointment/available-time-slots",
   GET_APPOINTMENTS_BY_DOCTOR: "/appointment/doctor", // New action type
-  UPDATE_APPOINTMENT_STATUS: "/:appointmentId/status",
+  UPDATE_APPOINTMENT_STATUS: "/appointment",
 };
 
 export const createAppointment = (appointmentData) => async (dispatch) => {
@@ -67,11 +67,9 @@ export const getAppointmentsByDoctor = (doctorId) => async (dispatch) => {
 
 export const updateAppointmentStatus =
   (appointmentId, status) => async (dispatch) => {
+    console.log("appointmentId", appointmentId);
     try {
-      const { data } = await axios.put(
-        `${ACTIONS.UPDATE_APPOINTMENT_STATUS}/${appointmentId}/status`,
-        { status }
-      );
+      const { data } = await axios.put(`${ACTIONS.UPDATE_APPOINTMENT_STATUS}/${appointmentId}/status`, { status });
       toast.success("Appointment status updated successfully");
       return data;
     } catch (error) {

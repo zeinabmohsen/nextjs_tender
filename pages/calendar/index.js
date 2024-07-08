@@ -6,9 +6,12 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { getAppointmentsByDoctor } from "../../redux/action/appointmentAction";
 import dynamic from "next/dynamic";
+import UpdateStatusPopup from "./components/UpdateStatusPopup";
 
 const CalendarPage = () => {
   const [appointments, setAppointments] = useState([]);
+  const [active, setActive] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -38,6 +41,7 @@ const CalendarPage = () => {
     }`,
     end: appointment.end_time,
     status: appointment.status, // Assuming appointment.status holds 'Scheduled', 'Cancelled', 'Completed'
+    appointment_id: appointment.appointment_id,
   }));
   const handleDateClick = (arg) => {
     // Redirect or handle date click as needed
@@ -66,7 +70,7 @@ const CalendarPage = () => {
           dayMaxEventRows={8}
           eventContent={(eventInfo) => (
             <div
-              className={`px-2 py-1 rounded-md ${
+              className={`px-2 py-1 rounded-md cursor-pointer ${
                 eventInfo.event.extendedProps.status === "Scheduled"
                   ? "bg-blue-500 text-white"
                   : eventInfo.event.extendedProps.status === "Cancelled"
@@ -75,6 +79,10 @@ const CalendarPage = () => {
                   ? "bg-green-500 text-white"
                   : ""
               }`}
+              onClick={() => {
+                setActive(true);
+                setSelectedAppointment(eventInfo.event.extendedProps);
+              }}
             >
               <div>{eventInfo.timeText}</div>
               <div>{eventInfo.event.title}</div>
@@ -83,6 +91,11 @@ const CalendarPage = () => {
           dateClick={handleDateClick} // Handle date click
         />
       </div>
+      <UpdateStatusPopup
+        active={active}
+        setActive={setActive}
+        appointment={selectedAppointment}
+      />
     </div>
   );
 };
