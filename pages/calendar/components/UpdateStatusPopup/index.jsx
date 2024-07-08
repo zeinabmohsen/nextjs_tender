@@ -1,17 +1,22 @@
 import Popup from "@/components/Popup";
 import { updateAppointmentStatus } from "@/redux/action/appointmentAction";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-const UpdateStatusPopup = ({appointment, active, setActive}) => {
-  const [newStatus, setNewStatus] = useState(appointment?.status);
+const UpdateStatusPopup = ({ appointment, active, setActive }) => {
+  const [newStatus, setNewStatus] = useState(null);
   const dispatch = useDispatch();
-  console.log("appointment", appointment);
 
-  const handleSubmit = useCallback(async() => {
-    await dispatch(updateAppointmentStatus(appointment.appointment_id, newStatus));
+  const handleSubmit = useCallback(async () => {
+    await dispatch(
+      updateAppointmentStatus(appointment.appointment_id, newStatus)
+    );
     setActive(false);
   }, [dispatch, appointment, newStatus]);
+
+  useEffect(() => {
+    setNewStatus(appointment?.status);
+  }, [appointment]);
 
   return (
     <Popup
@@ -31,7 +36,7 @@ const UpdateStatusPopup = ({appointment, active, setActive}) => {
             className="bg-[#019874] text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300 w-full"
             onClick={handleSubmit}
           >
-            Post Comment
+            Update Status
           </button>
         </div>
       }

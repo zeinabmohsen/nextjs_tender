@@ -67,7 +67,6 @@ export const getAppointmentsByDoctor = (doctorId) => async (dispatch) => {
 
 export const updateAppointmentStatus =
   (appointmentId, status) => async (dispatch) => {
-    console.log("appointmentId", appointmentId);
     try {
       const { data } = await axios.put(`${ACTIONS.UPDATE_APPOINTMENT_STATUS}/${appointmentId}/status`, { status });
       toast.success("Appointment status updated successfully");
