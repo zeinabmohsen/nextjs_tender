@@ -37,7 +37,6 @@ export const createPlace = (place) => async (dispatch) => {
   } catch (error) {
     console.error("Error creating place:", error);
 
-    toast.error("Error creating place");
   }
 };
 

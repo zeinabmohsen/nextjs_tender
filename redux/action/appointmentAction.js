@@ -57,6 +57,13 @@ export const getAppointmentsByDoctor = (doctorId) => async (dispatch) => {
     const { data } = await axios.get(
       `${ACTIONS.GET_APPOINTMENTS_BY_DOCTOR}/${doctorId}`
     );
+    console.log("data here", data)
+
+    dispatch({
+      type: ACTIONS.GET_APPOINTMENTS_BY_DOCTOR,
+      payload: data.appointments
+    })
+
     return data.appointments;
   } catch (error) {
     console.error("Error getting appointments by doctor ID:", error);
@@ -70,6 +77,10 @@ export const updateAppointmentStatus =
     try {
       const { data } = await axios.put(`${ACTIONS.UPDATE_APPOINTMENT_STATUS}/${appointmentId}/status`, { status });
       toast.success("Appointment status updated successfully");
+      dispatch({
+        type: ACTIONS.UPDATE_APPOINTMENT_STATUS,
+        payload: {appointmentId: appointmentId, status: status},
+      })
       return data;
     } catch (error) {
       console.error("Error updating appointment status:", error);

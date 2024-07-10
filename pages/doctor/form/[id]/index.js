@@ -9,6 +9,15 @@ const EditDoctorForm = () => {
   const router = useRouter();
   const { id } = router.query;
   const [img, setImage] = useState(null);
+  const [formData, setFormData] = useState({
+    doctor_name: '',
+    specialty: '',
+    experience: '',
+    number: '',
+    description: '',
+    doctor_image: null,
+    termsAccepted: false,
+  });
 
   const doctorData = useSelector(({ doctorReducer }) => doctorReducer.doctor?.doctor);
 
@@ -16,24 +25,23 @@ const EditDoctorForm = () => {
     if (id) {
       dispatch(getDoctorById(id))
         .then((response) => {
-          setFormData(response.data);
-          setImage(response.data.doctor_image);
+          const data = response.data;
+          setFormData({
+            doctor_name: data.doctor_name || '',
+            specialty: data.specialty || '',
+            experience: data.experience || '',
+            number: data.number || '',
+            description: data.description || '',
+            doctor_image: data.doctor_image || null,
+            termsAccepted: false,
+          });
+          setImage(data.doctor_image);
         })
         .catch((error) => {
           console.error('Error fetching doctor details:', error);
         });
     }
   }, [dispatch, id]);
-
-  const [formData, setFormData] = useState({
-    doctor_name: doctorData?.doctor_name || '',
-    specialty: doctorData?.specialty || '',
-    experience: doctorData?.experience || '',
-    number: doctorData?.number || '',
-    description: doctorData?.description || '',
-    doctor_image: null,
-    termsAccepted: false,
-  });
 
   useEffect(() => {
     if (doctorData) {
@@ -43,7 +51,7 @@ const EditDoctorForm = () => {
         experience: doctorData.experience || '',
         number: doctorData.number || '',
         description: doctorData.description || '',
-        doctor_image: null,
+        doctor_image: doctorData.doctor_image || null,
         termsAccepted: false,
       });
       setImage(doctorData.doctor_image);
@@ -51,10 +59,10 @@ const EditDoctorForm = () => {
   }, [doctorData]);
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value, type, checked } = event.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -9,10 +9,14 @@ import dynamic from "next/dynamic";
 import UpdateStatusPopup from "./components/UpdateStatusPopup";
 
 const CalendarPage = () => {
-  const [appointments, setAppointments] = useState([]);
+  // const [appointments, setAppointments] = useState([]); #layke hon sta3malt l use selector le 3a line 16, hay l use selector 
+  // bt 5alleenna nna22e mn redux, l eshya le mnshoooofon b redux dev tools hon
   const [active, setActive] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const dispatch = useDispatch();
+  const appointments = useSelector(
+    ({ appointmentReducer }) => appointmentReducer.appointments
+  );
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -22,7 +26,7 @@ const CalendarPage = () => {
           const doctorAppointments = await dispatch(
             getAppointmentsByDoctor(doctorId)
           );
-          setAppointments(doctorAppointments);
+          // setAppointments(doctorAppointments);
         } else {
           console.warn("localStorage is not available or userId is not set.");
         }
@@ -41,10 +45,11 @@ const CalendarPage = () => {
     }`,
     end: appointment.end_time,
     status: appointment.status, // Assuming appointment.status holds 'Scheduled', 'Cancelled', 'Completed'
+    appointment_id: appointment.appointment_id,
   }));
   const handleDateClick = (arg) => {
     // Redirect or handle date click as needed
-    console.log('Date clicked:', arg.dateStr);
+    console.log("Date clicked:", arg.dateStr);
   };
 
   return (
@@ -88,7 +93,7 @@ const CalendarPage = () => {
               <div>{eventInfo.event.extendedProps.status}</div>
             </div>
           )}
-          dateClick={handleDateClick} 
+          dateClick={handleDateClick}
         />
       </div>
       <UpdateStatusPopup

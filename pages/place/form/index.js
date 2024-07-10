@@ -141,7 +141,12 @@ const Form = () => {
               <option value="">-- Select Classification --</option>
               <option value="restaurant">Restaurant</option>
               <option value="hotel">Hotel</option>
-              <option value="tourist_attraction">Tourist Attraction</option>
+              <option value="Natural Garden">Natural Garden</option>
+              <option value="Specialized School">Specialized School</option>
+              <option value="Inclusive Playground">Inclusive Playground</option>
+              <option value="Tourist Attraction">Tourist Attraction</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Education">Education</option>
             </select>
           </div>
           <div className="mb-4">

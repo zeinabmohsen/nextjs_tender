@@ -84,8 +84,9 @@ const CommunityComments = () => {
                         className="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-019874 mr-2"
                     >
                         <option value="General">General</option>
-                        <option value="Announcement">Announcement</option>
-                        <option value="Question">Question</option>
+                        <option value="Austim">Austim</option>
+                        <option value="ADHD">ADHD</option>
+                        <option value="Cerebral Palsy">Cerebral Palsy</option>
                         {/* Add more options as needed */}
                     </select>
                     <button

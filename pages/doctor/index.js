@@ -81,12 +81,12 @@ const Doctors = () => {
                                     </div>
                                     <div className="">
                                         <div>
-                                            <Link href={`/doctor/form/${doctor.doctor_id}`}>
+                                            {/* <Link href={`/doctor/form/${doctor.doctor_id}`}>
                                                 <button className='text-purple-600 mr-2'>
                                                     <BsPencilSquare />
                                                 </button>
-                                            </Link>
-                                            <button onClick={() => handleDeleteDoctor(doctor.doctor_id)} className='text-red-600'>
+                                            </Link> */}
+                                            <button onClick={() => handleDeleteDoctor(doctor.doctor_id)} className='text-red-600 ml-2'>
                                                 <BsTrash />
                                             </button>
                                         </div>
